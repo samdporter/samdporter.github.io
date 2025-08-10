@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sam D Porter – PET/SPECT/CT Reconstruction</title>
+  <meta name="description" content="Sam D Porter – final‑year PhD student. PET/SPECT/CT synergistic reconstruction, optimisation algorithms, open‑source software." />
+  <meta property="og:title" content="Sam D Porter" />
+  <meta property="og:description" content="PET/SPECT/CT synergistic reconstruction & open‑source." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://github.com/samdporter.png" />
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    :root{
+      --bg: #0b1020;           /* dark background */
+      --bg-soft: #111834;
+      --text: #e6edf3;         /* light text */
+      --muted: #9fb0c3;
+      --brand: #5dd6b3;        /* teal */
+      --accent: #8ab4ff;       /* soft blue */
+      --card: #0e1530;
+      --border: #253258;
+    }
+    .light{
+      --bg: #ffffff;
+      --bg-soft: #f6f7fb;
+      --text: #0b1223;
+      --muted: #516079;
+      --brand: #0ea5e9;
+      --accent: #1f7ae0;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    .container{max-width: 980px; margin: 0 auto; padding: 24px;}
+    header{display:flex; align-items:center; gap:20px; padding: 32px 0 12px 0;}
+    header img{width:88px; height:88px; border-radius: 50%; border: 2px solid var(--border); box-shadow: 0 6px 24px rgba(0,0,0,.35)}
+    .name{font-size: clamp(22px, 2.4vw + 12px, 44px); font-weight: 800; letter-spacing: .2px;}
+    .tag{color: var(--muted); margin-top: 6px}
+    .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius: 999px; color:var(--muted); text-decoration:none;}
+    .chip:hover{border-color:var(--accent); color:var(--text)}
+    .row{display:flex; flex-wrap:wrap; gap:14px; margin-top: 12px}
+    .actions{margin-left:auto; display:flex; gap:10px;}
+    .btn{border:1px solid var(--border); background:transparent; color:var(--text); padding:8px 12px; border-radius:10px; cursor:pointer}
+    .btn:hover{border-color: var(--accent)}
+    section{margin: 28px 0}
+    h2{font-size: 22px; letter-spacing:.2px; margin: 0 0 10px 0}
+    p{margin: 0 0 10px 0}
+
+    .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:14px;}
+    .card{background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: 0 10px 28px rgba(0,0,0,.18)}
+    .card h3{margin:0 0 6px 0; font-size: 16px}
+    .card p{color: var(--muted); font-size: 14px}
+    .meta{display:flex; gap:10px; align-items:center; margin-top: 10px; color:var(--muted); font-size: 13px}
+    .pill{border:1px solid var(--border); border-radius:999px; padding:2px 8px}
+    a{color: var(--brand); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .pub{border-left: 3px solid var(--border); padding-left: 12px; margin: 14px 0}
+    .pub-title{font-weight:700}
+    .pub-venue{color: var(--muted)}
+    .footer{color:var(--muted); font-size: 13px; padding: 28px 0}
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; background: var(--bg-soft); border: 1px solid var(--border); border-bottom-width: 3px; padding: 2px 6px; border-radius: 6px}
+    .sep{opacity:.4}
+    .hide{display:none}
+    .hr{height:1px; background: var(--border); border:0; margin: 10px 0 18px 0}
+    @media (max-width: 560px){ header{flex-direction:column; align-items:flex-start} .actions{margin:0}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="https://github.com/samdporter" target="_blank" rel="noopener"><img id="avatar" alt="Sam D Porter avatar" src="https://github.com/samdporter.png" /></a>
+      <div>
+        <div class="name" id="name">Sam D Porter</div>
+        <div class="tag" id="tag">Final‑year PhD student · PET/SPECT/CT synergistic reconstruction · Optimisation & inverse problems</div>
+        <div class="row">
+          <a class="chip" href="https://github.com/samdporter" target="_blank" rel="noopener" aria-label="GitHub profile">🐙 GitHub</a>
+          <!-- Add your links: Google Scholar, ORCID, Twitter, etc. -->
+          <!-- <a class="chip" href="https://scholar.google.com/citations?user=XXXX" target="_blank" rel="me">🧠 Scholar</a> -->
+          <!-- <a class="chip" href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="me">🧬 ORCID</a> -->
+          <!-- <a class="chip" href="mailto:you@example.com">✉️ Email</a> -->
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="toggleTheme" title="Toggle light/dark">Toggle theme</button>
+        <a class="btn" href="#config" title="Jump to configuration">Edit config ↓</a>
+      </div>
+    </header>
+
+    <section id="about">
+      <h2>About</h2>
+      <p id="aboutText">
+        I work on fast, regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.
+      </p>
+    </section>
+
+    <section id="repos">
+      <h2>Featured repositories</h2>
+      <div id="repoGrid" class="grid" aria-live="polite"></div>
+    </section>
+
+    <section id="publications">
+      <h2>Selected publications</h2>
+      <div id="pubList"></div>
+    </section>
+
+    <section id="news" class="hide">
+      <h2>News</h2>
+      <div id="newsList"></div>
+    </section>
+
+    <hr class="hr" />
+    <section id="config">
+      <h2>Quick configuration</h2>
+      <p>Edit the <span class="kbd">CONFIG</span> object below to customise content. Add or remove repositories and papers. No build step required.</p>
+      <details>
+        <summary>Show configuration</summary>
+        <pre id="cfgDump" style="overflow:auto"></pre>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> Sam D Porter</span>
+      <span class="sep"> · </span>
+      <a href="#" id="editLink">Edit this page</a>
+    </footer>
+  </div>
+
+  <script>
+  /* =============================
+     SITE CONFIGURATION
+     - Change values here; everything else updates automatically.
+     - Repos can be any public GitHub slug: "owner/name".
+     - Publications accept arbitrary fields; shown gracefully if present.
+  ==============================*/
+  const CONFIG = {
+    name: "Sam D Porter",
+    tagline: "Final‑year PhD student · PET/SPECT/CT synergistic reconstruction",
+    avatar: "https://github.com/samdporter.png",
+    about: "I work on fast, regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.",
+    featuredRepos: [
+      // List the projects you want to highlight (owner/name)
+      "samdporter/SETR",
+      "samdporter/STIR-SIMIND-Connection",
+      "samdporter/Synergistic_dTNV",
+      "samdporter/MIC23_STIR_SIMIND",
+      "samdporter/registration"
+    ],
+    publications: [
+      {
+        title: "Effect of Prior Smoothing on the Convergence of Proximal Algorithms for PET and SPECT Reconstruction",
+        authors: "Sam Porter, Daniel Deidda, Simon Arridge, Kris Thielemans",
+        venue: "IEEE NSS/MIC (short paper)",
+        year: 2024,
+        pdf: "https://discovery.ucl.ac.uk/10190208/1/Porter_IEEEProceedingsSamPorter22_NoCopy.pdf",
+        links: [
+          {label: "PDF", url: "https://discovery.ucl.ac.uk/10190208/1/Porter_IEEEProceedingsSamPorter22_NoCopy.pdf"},
+          {label: "UCL profile", url: "https://profiles.ucl.ac.uk/87068-sam-porter/publications"}
+        ]
+      }
+      // Add more entries like:
+      // {title: "Your paper title", authors: "A. Author, B. Author", venue: "Journal/Conf", year: 2025, doi: "…", pdf: "…", code: "…"}
+    ],
+    news: [
+      // Optional: {date: "2025-06-15", text: "Released SETR 0.2"}
+    ]
+  };
+  /* ============================= */
+
+  // Apply config to UI
+  const $ = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+  function applyConfig(){
+    $('#name').textContent = CONFIG.name;
+    $('#tag').textContent = CONFIG.tagline;
+    $('#avatar').src = CONFIG.avatar;
+    $('#aboutText').textContent = CONFIG.about;
+    $('#cfgDump').textContent = JSON.stringify(CONFIG, null, 2);
+  }
+
+  // Render featured repos using GitHub API (with graceful fallback)
+  async function renderRepos(){
+    const grid = $('#repoGrid');
+    grid.innerHTML = '';
+    for (const slug of CONFIG.featuredRepos){
+      try{
+        const resp = await fetch(`https://api.github.com/repos/${slug}`);
+        if(!resp.ok) throw new Error('HTTP '+resp.status);
+        const r = await resp.json();
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3><a href="${r.html_url}" target="_blank" rel="noopener">${r.full_name}</a></h3>
+          <p>${r.description ?? 'No description.'}</p>
+          <div class="meta">
+            <span class="pill" title="Primary language">${r.language ?? '—'}</span>
+            <span>★ ${r.stargazers_count}</span>
+            <span>Last push: ${new Date(r.pushed_at).toLocaleDateString()}</span>
+          </div>`;
+        grid.appendChild(card);
+      }catch(e){
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3><a href="https://github.com/${slug}" target="_blank" rel="noopener">${slug}</a></h3>
+          <p>GitHub API rate-limited or unavailable. Click to view repository.</p>`;
+        grid.appendChild(card);
+      }
+    }
+  }
+
+  // Render publications
+  function renderPubs(){
+    const root = $('#pubList');
+    root.innerHTML = '';
+    for(const p of CONFIG.publications){
+      const div = document.createElement('div');
+      div.className = 'pub';
+      const links = (p.links||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join(' · ');
+      const extra = [p.doi?`<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>`:'', p.pdf?`<a href="${p.pdf}" target="_blank" rel="noopener">PDF</a>`:'', p.code?`<a href="${p.code}" target="_blank" rel="noopener">Code</a>`:''].filter(Boolean).join(' · ');
+      div.innerHTML = `
+        <div class="pub-title">${p.title}</div>
+        <div class="pub-venue">${p.authors || ''}${p.authors? ' · ' : ''}${p.venue || ''}${p.venue? ' · ' : ''}${p.year || ''}</div>
+        <div class="meta">${[links, extra].filter(Boolean).join(' · ')}</div>
+      `;
+      root.appendChild(div);
+    }
+  }
+
+  // Optional news
+  function renderNews(){
+    const wrap = $('#news');
+    if(!CONFIG.news || CONFIG.news.length===0){ wrap.classList.add('hide'); return; }
+    wrap.classList.remove('hide');
+    const root = $('#newsList');
+    root.innerHTML = '';
+    for(const n of CONFIG.news){
+      const div = document.createElement('div');
+      div.className = 'pub';
+      div.innerHTML = `<div class="pub-title">${n.text}</div><div class="pub-venue">${new Date(n.date).toLocaleDateString()}</div>`;
+      root.appendChild(div);
+    }
+  }
+
+  // Theme handling
+  function setTheme(mode){
+    document.documentElement.classList.toggle('light', mode==='light');
+    localStorage.setItem('theme', mode);
+  }
+  function initTheme(){
+    const saved = localStorage.getItem('theme');
+    if(saved){ setTheme(saved); return; }
+    const prefersLight = matchMedia('(prefers-color-scheme: light)').matches;
+    setTheme(prefersLight? 'light' : 'dark');
+  }
+
+  // Boot
+  initTheme();
+  applyConfig();
+  renderRepos();
+  renderPubs();
+  renderNews();
+  $('#toggleTheme').addEventListener('click', ()=>{
+    const now = document.documentElement.classList.contains('light')? 'dark':'light';
+    setTheme(now);
+  });
+  $('#year').textContent = new Date().getFullYear();
+  $('#editLink').href = '#config';
+  </script>
+
+  <!--
+  =============================
+  DEPLOYMENT (GitHub Pages)
+  1) Create a repo named samdporter.github.io
+  2) Put this file at the repo root as index.html
+  3) (Optional) Add a blank file named .nojekyll to bypass Jekyll
+  4) In Settings → Pages, set Source to "Deploy from a branch" (main / root)
+  5) Push. Your site will be live at https://samdporter.github.io
+  =============================
+  -->
+</body>
+</html>
