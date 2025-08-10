@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sam D Porter – PET/SPECT/CT Reconstruction</title>
+  <title>Sam Porter – PET/SPECT/CT Reconstruction</title>
   <meta name="description" content="Sam D Porter – final‑year PhD student. PET/SPECT/CT synergistic reconstruction, optimisation algorithms, open‑source software." />
   <meta property="og:title" content="Sam D Porter" />
   <meta property="og:description" content="PET/SPECT/CT synergistic reconstruction & open‑source." />
@@ -95,7 +95,7 @@
     <section id="about">
       <h2>About</h2>
       <p id="aboutText">
-        I work on fast, regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.
+        I work on fast, joint regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.
       </p>
     </section>
 
@@ -139,7 +139,7 @@
      - Publications accept arbitrary fields; shown gracefully if present.
   ==============================*/
   const CONFIG = {
-    name: "Sam D Porter",
+    name: "Sam Porter",
     tagline: "Final‑year PhD student · PET/SPECT/CT synergistic reconstruction",
     avatar: "https://github.com/samdporter.png",
     about: "I work on fast, regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.",
@@ -147,11 +147,13 @@
       // List the projects you want to highlight (owner/name)
       "samdporter/SETR",
       "samdporter/STIR-SIMIND-Connection",
-      "samdporter/Synergistic_dTNV",
-      "samdporter/MIC23_STIR_SIMIND",
-      "samdporter/registration"
     ],
     publications: [
+      // Add more entries like:
+      // {title: "Your paper title", authors: "A. Author, B. Author", venue: "Journal/Conf", year: 2025, doi: "…", pdf: "…", code: "…"}
+    ],
+    
+    conferences:[
       {
         title: "Effect of Prior Smoothing on the Convergence of Proximal Algorithms for PET and SPECT Reconstruction",
         authors: "Sam Porter, Daniel Deidda, Simon Arridge, Kris Thielemans",
@@ -163,8 +165,31 @@
           {label: "UCL profile", url: "https://profiles.ucl.ac.uk/87068-sam-porter/publications"}
         ]
       }
-      // Add more entries like:
-      // {title: "Your paper title", authors: "A. Author, B. Author", venue: "Journal/Conf", year: 2025, doi: "…", pdf: "…", code: "…"}
+      {
+        title: "An open source workflow to investigate the impact of the reconstruction method in absorbed dose rate estimation in 177-Lu-DOTATATE treatments",
+        authors: "Stathis Varzakis, Ana Denis-bacelar, Sarah Mcquaid, John Dickson, Sam Porter and Kris Thielemans",
+        venue: "Journal of Nuclear Medicine (Supplement 1)",
+        year: 2025,
+        links: [
+          { label: "Abstract", url: "https://jnm.snmjournals.org/content/66/supplement_1/251842.abstract" }
+        ]
+      }
+    ],
+    manuscripts:[
+    ],
+    other contributions:]
+      {
+        title: "Stochastic Optimisation Framework using the Core Imaging Library and Synergistic Image Reconstruction Framework for PET Reconstruction",
+        authors: "Evangelos Papoutsellis, Casper da Costa-Luis, Daniel Deidda, Claire Delplancke, Margaret Duff, Gemma Fardell, Ashley Gillman, Jakob S. Jørgensen, Zeljko Kereta, Evgueni Ovtchinnikov, Edoardo Pasca, Georg Schramm, Kris Thielemans",
+        venue: "arXiv (math.NA)",
+        year: 2024,
+        doi: "10.48550/arXiv.2406.15159",
+        pdf: "https://arxiv.org/pdf/2406.15159.pdf",
+        links: [
+          { label: "arXiv", url: "https://arxiv.org/abs/2406.15159" },
+          { label: "PDF", url: "https://arxiv.org/pdf/2406.15159.pdf" }
+        ]
+      }
     ],
     news: [
       // Optional: {date: "2025-06-15", text: "Released SETR 0.2"}
@@ -248,6 +273,63 @@
     }
   }
 
+function renderExtraSections() {
+  const mappings = [
+    { key: 'conferences',        title: 'Conference papers & abstracts' },
+    { key: 'manuscripts',        title: 'Manuscripts' },
+    { key: 'otherContributions', title: 'Other contributions' }
+  ];
+
+  const container  = document.querySelector('.container');
+  const afterHere  = document.querySelector('#publications');
+
+  for (const { key, title } of mappings) {
+    const items = CONFIG[key];
+    if (!Array.isArray(items) || items.length === 0) continue;
+
+    // Create the section if missing
+    let sec = document.getElementById(key);
+    if (!sec) {
+      sec = document.createElement('section');
+      sec.id = key;
+      sec.innerHTML = `<h2>${title}</h2><div class="list"></div>`;
+      if (afterHere && afterHere.parentNode) {
+        afterHere.parentNode.insertBefore(sec, afterHere.nextSibling);
+      } else {
+        container.appendChild(sec);
+      }
+    }
+
+    // Render items using the same 'pub' card style
+    const root = sec.querySelector('.list');
+    root.innerHTML = '';
+    for (const p of items) {
+      const div = document.createElement('div');
+      div.className = 'pub';
+      const links = (p.links || [])
+        .map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`)
+        .join(' · ');
+      const extra = [
+        p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>` : '',
+        p.pdf ? `<a href="${p.pdf}" target="_blank" rel="noopener">PDF</a>` : '',
+        p.code? `<a href="${p.code}" target="_blank" rel="noopener">Code</a>`: ''
+      ].filter(Boolean).join(' · ');
+      const roleBits = [p.role, p.credit].filter(Boolean).join(' · ');
+
+      div.innerHTML = `
+        <div class="pub-title">${p.title || ''}</div>
+        <div class="pub-venue">
+          ${[p.authors, p.venue, p.year].filter(Boolean).join(' · ')}
+          ${roleBits ? ` · <em>${roleBits}</em>` : ''}
+        </div>
+        <div class="meta">${[links, extra].filter(Boolean).join(' · ')}</div>
+      `;
+      root.appendChild(div);
+    }
+  }
+}
+
+
   // Theme handling
   function setTheme(mode){
     document.documentElement.classList.toggle('light', mode==='light');
@@ -265,6 +347,7 @@
   applyConfig();
   renderRepos();
   renderPubs();
+  renderExtraSections();  
   renderNews();
   $('#toggleTheme').addEventListener('click', ()=>{
     const now = document.documentElement.classList.contains('light')? 'dark':'light';
