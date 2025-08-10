@@ -265,61 +265,64 @@
     }
   }
 
-function renderExtraSections() {
-  const mappings = [
-    { key: 'conferences',        title: 'Conference papers & abstracts' },
-    { key: 'manuscripts',        title: 'Manuscripts' },
-    { key: 'otherContributions', title: 'Other contributions' }
-  ];
+  function renderExtraSections() {
+    const mappings = [
+      { key: 'conferences',        title: 'Conference papers & abstracts' },
+      { key: 'manuscripts',        title: 'Manuscripts' },
+      { key: 'otherContributions', title: 'Other contributions' }
+    ];
 
-  const container  = document.querySelector('.container');
-  const afterHere  = document.querySelector('#publications');
+    const container  = document.querySelector('.container');
+    const afterHere  = document.querySelector('#publications');
+    let insertAfter = afterHere; // keep order stable
 
-  for (const { key, title } of mappings) {
-    const items = CONFIG[key];
-    if (!Array.isArray(items) || items.length === 0) continue;
+    for (const { key, title } of mappings) {
+      const items = CONFIG[key];
+      if (!Array.isArray(items) || items.length === 0) continue;
 
-    // Create the section if missing
-    let sec = document.getElementById(key);
-    if (!sec) {
-      sec = document.createElement('section');
-      sec.id = key;
-      sec.innerHTML = `<h2>${title}</h2><div class="list"></div>`;
-      if (afterHere && afterHere.parentNode) {
-        afterHere.parentNode.insertBefore(sec, afterHere.nextSibling);
-      } else {
-        container.appendChild(sec);
+      // Create the section if missing
+      let sec = document.getElementById(key);
+      if (!sec) {
+        sec = document.createElement('section');
+        sec.id = key;
+        sec.innerHTML = `<h2>${title}</h2><div class="list"></div>`;
+        if (insertAfter && insertAfter.parentNode) {
+          insertAfter.parentNode.insertBefore(sec, insertAfter.nextSibling);
+          insertAfter = sec; // advance the pointer
+        } else {
+          container.appendChild(sec);
+          insertAfter = sec;
+        }
+      }
+
+      // Render items using the same 'pub' card style
+      const root = sec.querySelector('.list');
+      root.innerHTML = '';
+      for (const p of items) {
+        const div = document.createElement('div');
+        div.className = 'pub';
+        const links = (p.links || [])
+          .map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`)
+          .join(' · ');
+        const extra = [
+          p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>` : '',
+          p.pdf ? `<a href="${p.pdf}" target="_blank" rel="noopener">PDF</a>` : '',
+          p.code? `<a href="${p.code}" target="_blank" rel="noopener">Code</a>`: ''
+        ].filter(Boolean).join(' · ');
+        const roleBits = [p.role, p.credit].filter(Boolean).join(' · ');
+
+        div.innerHTML = `
+          <div class="pub-title">${p.title || ''}</div>
+          <div class="pub-venue">
+            ${[p.authors, p.venue, p.year].filter(Boolean).join(' · ')}
+            ${roleBits ? ` · <em>${roleBits}</em>` : ''}
+          </div>
+          <div class="meta">${[links, extra].filter(Boolean).join(' · ')}</div>
+        `;
+        root.appendChild(div);
       }
     }
-
-    // Render items using the same 'pub' card style
-    const root = sec.querySelector('.list');
-    root.innerHTML = '';
-    for (const p of items) {
-      const div = document.createElement('div');
-      div.className = 'pub';
-      const links = (p.links || [])
-        .map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`)
-        .join(' · ');
-      const extra = [
-        p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>` : '',
-        p.pdf ? `<a href="${p.pdf}" target="_blank" rel="noopener">PDF</a>` : '',
-        p.code? `<a href="${p.code}" target="_blank" rel="noopener">Code</a>`: ''
-      ].filter(Boolean).join(' · ');
-      const roleBits = [p.role, p.credit].filter(Boolean).join(' · ');
-
-      div.innerHTML = `
-        <div class="pub-title">${p.title || ''}</div>
-        <div class="pub-venue">
-          ${[p.authors, p.venue, p.year].filter(Boolean).join(' · ')}
-          ${roleBits ? ` · <em>${roleBits}</em>` : ''}
-        </div>
-        <div class="meta">${[links, extra].filter(Boolean).join(' · ')}</div>
-      `;
-      root.appendChild(div);
-    }
   }
-}
 
 
   // Theme handling
@@ -339,7 +342,7 @@ function renderExtraSections() {
   applyConfig();
   renderRepos();
   renderPubs();
-  renderExtraSections();  
+  renderExtraSections();
   renderNews();
   $('#toggleTheme').addEventListener('click', ()=>{
     const now = document.documentElement.classList.contains('light')? 'dark':'light';
