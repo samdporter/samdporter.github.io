@@ -12,12 +12,12 @@
   <meta name="theme-color" content="#0f172a" />
   <style>
     :root{
-      --bg: #0b1020;           /* dark background */
+      --bg: #0b1020;
       --bg-soft: #111834;
-      --text: #e6edf3;         /* light text */
+      --text: #e6edf3;
       --muted: #9fb0c3;
-      --brand: #5dd6b3;        /* teal */
-      --accent: #8ab4ff;       /* soft blue */
+      --brand: #5dd6b3;
+      --accent: #8ab4ff;
       --card: #0e1530;
       --border: #253258;
     }
@@ -68,6 +68,8 @@
     .sep{opacity:.4}
     .hide{display:none}
     .hr{height:1px; background: var(--border); border:0; margin: 10px 0 18px 0}
+    .award-item{display:flex; align-items:center; gap:10px; margin: 10px 0; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px}
+    .award-icon{font-size: 24px}
     @media (max-width: 560px){ header{flex-direction:column; align-items:flex-start} .actions{margin:0}}
   </style>
 </head>
@@ -80,10 +82,6 @@
         <div class="tag" id="tag">Final‑year PhD student · PET/SPECT/CT synergistic reconstruction · Optimisation & inverse problems</div>
         <div class="row">
           <a class="chip" href="https://github.com/samdporter" target="_blank" rel="noopener" aria-label="GitHub profile">🐙 GitHub</a>
-          <!-- Add your links: Google Scholar, ORCID, Twitter, etc. -->
-          <!-- <a class="chip" href="https://scholar.google.com/citations?user=XXXX" target="_blank" rel="me">🧠 Scholar</a> -->
-          <!-- <a class="chip" href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="me">🧬 ORCID</a> -->
-          <!-- <a class="chip" href="mailto:you@example.com">✉️ Email</a> -->
         </div>
       </div>
       <div class="actions">
@@ -102,6 +100,11 @@
     <section id="repos">
       <h2>Featured repositories</h2>
       <div id="repoGrid" class="grid" aria-live="polite"></div>
+    </section>
+
+    <section id="awards">
+      <h2>Awards & Recognition</h2>
+      <div id="awardsList"></div>
     </section>
 
     <section id="publications">
@@ -132,12 +135,6 @@
   </div>
 
   <script>
-  /* =============================
-     SITE CONFIGURATION
-     - Change values here; everything else updates automatically.
-     - Repos can be any public GitHub slug: "owner/name".
-     - Publications accept arbitrary fields; shown gracefully if present.
-  ==============================*/
   const CONFIG = {
     name: "Sam Porter",
     tagline: "Final-year PhD student · PET/SPECT/CT synergistic reconstruction",
@@ -145,28 +142,89 @@
     about: "I work on fast, regularised PET/SPECT/CT reconstruction: proximal & stochastic algorithms, preconditioning, and synergistic priors coupling modalities.",
     featuredRepos: [
       "samdporter/SETR",
-      "samdporter/SIRF-SIMIND-Connection"
+      "samdporter/SIRF-SIMIND-Connection",
+      "samdporter/sirf-viewer"
+    ],
+    awards: [
+      {
+        title: "1st Runner-up, PETRIC Competition",
+        year: 2024,
+        description: "Presented methods at IEEE MIC 2024, Tampa"
+      },
+      {
+        title: "PGI Recognition Awards",
+        year: 2023,
+        venue: "PGI Conference, NPL",
+        date: "7th June 2023"
+      }
     ],
     publications: [],
-    conferences: [
+    conferenceTalks: [
       {
-        title: "Effect of Prior Smoothing on the Convergence of Proximal Algorithms for PET and SPECT Reconstruction",
-        authors: "Sam Porter, Daniel Deidda, Simon Arridge, Kris Thielemans",
-        venue: "IEEE NSS/MIC (short paper)",
+        title: "Comparison of Synergistic and Single Modality Anatomically-Informed Structural Priors for Yttrium-90 PET and SPECT Reconstruction",
+        venue: "PSMR 2024 - 10th Conference on PET, SPECT, and MR Multimodal Technologies",
+        location: "La Biodola, Isola d'Elba",
         year: 2024,
-        pdf: "https://discovery.ucl.ac.uk/10190208/1/Porter_IEEEProceedingsSamPorter22_NoCopy.pdf",
+        date: "19-23 May 2024",
         links: [
-          { label: "PDF", url: "https://discovery.ucl.ac.uk/10190208/1/Porter_IEEEProceedingsSamPorter22_NoCopy.pdf" },
-          { label: "UCL profile", url: "https://profiles.ucl.ac.uk/87068-sam-porter/publications" }
+          { label: "Abstract", url: "https://ejnmmiphys.springeropen.com/articles/supplements/volume-2-supplement-1" }
+        ]
+      }
+    ],
+    conferencePosters: [
+      {
+        title: "Simultaneous Multi-Bed MAP Reconstruction with a CT-Guided Directional TV Prior for Y-90 PET SIRT",
+        venue: "PET is Wonderful, Edinburgh",
+        year: 2024,
+        note: "Proceedings forthcoming"
+      },
+      {
+        title: "Optimising Subset Selection in Synergistic Emission Tomography Reconstruction",
+        authors: "Sam Porter, Daniel Deidda, Simon Arridge, Kris Thielemans",
+        venue: "IEEE NSS/MIC",
+        year: 2024,
+        links: [
+          { label: "PDF", url: "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10654962" },
+          { label: "IEEE", url: "https://ieeexplore.ieee.org/document/10654962" }
         ]
       },
       {
-        title: "An open source workflow to investigate the impact of the reconstruction method in absorbed dose rate estimation in 177-Lu-DOTATATE treatments",
-        authors: "Stathis Varzakis, Ana Denis-bacelar, Sarah Mcquaid, John Dickson, Sam Porter and Kris Thielemans",
-        venue: "Journal of Nuclear Medicine (Supplement 1)",
-        year: 2025,
+        title: "Effect of Prior Smoothing on the Convergence of Proximal Algorithms for PET and SPECT Reconstruction",
+        authors: "Sam Porter, Daniel Deidda, Simon Arridge, Kris Thielemans",
+        venue: "IEEE NSS/MIC",
+        year: 2022,
         links: [
-          { label: "Abstract", url: "https://jnm.snmjournals.org/content/66/supplement_1/251842.abstract" }
+          { label: "PDF", url: "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10399254" },
+          { label: "IEEE", url: "https://ieeexplore.ieee.org/document/10399254" }
+        ]
+      }
+    ],
+    workshopTalks: [
+      {
+        title: "Enhancing SIMIND-SIRF Integration for Improved SPECT Modeling and Reconstruction using Residual Correction Principles",
+        authors: "S. D. Porter, D. Deidda, K. Thielemans, R. Gillen",
+        venue: "STIR User's and Developer's Meeting 2024",
+        year: 2024,
+        links: [
+          { label: "Meeting page", url: "https://stir.sourceforge.net/2024UsersMeeting/" }
+        ]
+      },
+      {
+        title: "Integrating SIMIND Monte Carlo Simulator with SIRF for Improved SPECT Reconstructions",
+        authors: "S. D. Porter, R. Gillen, D. Deidda, K. Thielemans",
+        venue: "STIR User's and Developer's Meeting 2023",
+        year: 2023,
+        links: [
+          { label: "Meeting page", url: "https://stir.sourceforge.net/2023UsersMeeting/" }
+        ]
+      },
+      {
+        title: "Connecting STIR and the SIMIND Monte Carlo Simulator",
+        authors: "R. Gillen, S. D. Porter, M. Ljungberg, K. Thielemans",
+        venue: "STIR User's and Developer's Meeting 2022",
+        year: 2022,
+        links: [
+          { label: "Meeting page", url: "https://stir.sourceforge.net/2022UsersMeeting/" }
         ]
       }
     ],
@@ -178,18 +236,41 @@
         venue: "arXiv (math.NA)",
         year: 2024,
         doi: "10.48550/arXiv.2406.15159",
-        pdf: "https://arxiv.org/pdf/2406.15159.pdf",
+        credit: "Acknowledged for contributions",
         links: [
           { label: "arXiv", url: "https://arxiv.org/abs/2406.15159" },
-          { label: "PDF", url: "https://arxiv.org/pdf/2406.15159.pdf" }
+          { label: "PDF", url: "https://arxiv.org/pdf/2406.15159" }
+        ]
+      },
+      {
+        title: "In-Silico Usability Demonstration for PETSIRD, the open PET Raw Data Format of the Emission Tomography Standardization Initiative (ETSI): report on ETSI's second hackathon results",
+        venue: "Journal of Nuclear Medicine (Supplement 1)",
+        year: 2025,
+        links: [
+          { label: "Abstract", url: "https://jnm.snmjournals.org/content/66/supplement_1/251417.abstract" }
+        ]
+      },
+      {
+        title: "An open source workflow to investigate the impact of the reconstruction method in absorbed dose rate estimation in 177-Lu-DOTATATE treatments",
+        authors: "Stathis Varzakis, Ana Denis-bacelar, Sarah Mcquaid, John Dickson, Sam Porter and Kris Thielemans",
+        venue: "Journal of Nuclear Medicine (Supplement 1)",
+        year: 2025,
+        links: [
+          { label: "Abstract", url: "https://jnm.snmjournals.org/content/66/supplement_1/251842.abstract" }
+        ]
+      },
+      {
+        title: "Partial volume correction of FDG PETCT: Does it lead to a more accurate assessment in carotid plaque analysis?",
+        venue: "Journal of Nuclear Medicine (Supplement 2)",
+        year: 2024,
+        links: [
+          { label: "Abstract", url: "https://jnm.snmjournals.org/content/65/supplement_2/242285.abstract" }
         ]
       }
     ],
     news: []
   };
 
-
-  // Apply config to UI
   const $ = (s, r=document)=>r.querySelector(s);
   const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 
@@ -201,7 +282,6 @@
     $('#cfgDump').textContent = JSON.stringify(CONFIG, null, 2);
   }
 
-  // Render featured repos using GitHub API (with graceful fallback)
   async function renderRepos(){
     const grid = $('#repoGrid');
     grid.innerHTML = '';
@@ -232,7 +312,24 @@
     }
   }
 
-  // Render publications
+  function renderAwards(){
+    const root = $('#awardsList');
+    root.innerHTML = '';
+    for(const award of CONFIG.awards){
+      const div = document.createElement('div');
+      div.className = 'award-item';
+      const details = [award.venue, award.date].filter(Boolean).join(' · ');
+      div.innerHTML = `
+        <div class="award-icon">🏆</div>
+        <div style="flex:1">
+          <div style="font-weight:700">${award.title}</div>
+          <div style="color:var(--muted); font-size:14px">${award.year}${details ? ' · ' + details : ''}${award.description ? ' · ' + award.description : ''}</div>
+        </div>
+      `;
+      root.appendChild(div);
+    }
+  }
+
   function renderPubs(){
     const root = $('#pubList');
     root.innerHTML = '';
@@ -250,7 +347,6 @@
     }
   }
 
-  // Optional news
   function renderNews(){
     const wrap = $('#news');
     if(!CONFIG.news || CONFIG.news.length===0){ wrap.classList.add('hide'); return; }
@@ -267,20 +363,21 @@
 
   function renderExtraSections() {
     const mappings = [
-      { key: 'conferences',        title: 'Conference papers & abstracts' },
-      { key: 'manuscripts',        title: 'Manuscripts' },
-      { key: 'otherContributions', title: 'Other contributions' }
+      { key: 'conferenceTalks',     title: 'Conference talks' },
+      { key: 'conferencePosters',   title: 'Conference posters' },
+      { key: 'workshopTalks',       title: 'Workshop & meeting presentations' },
+      { key: 'manuscripts',         title: 'Manuscripts' },
+      { key: 'otherContributions',  title: 'Other contributions' }
     ];
 
     const container  = document.querySelector('.container');
     const afterHere  = document.querySelector('#publications');
-    let insertAfter = afterHere; // keep order stable
+    let insertAfter = afterHere;
 
     for (const { key, title } of mappings) {
       const items = CONFIG[key];
       if (!Array.isArray(items) || items.length === 0) continue;
 
-      // Create the section if missing
       let sec = document.getElementById(key);
       if (!sec) {
         sec = document.createElement('section');
@@ -288,14 +385,13 @@
         sec.innerHTML = `<h2>${title}</h2><div class="list"></div>`;
         if (insertAfter && insertAfter.parentNode) {
           insertAfter.parentNode.insertBefore(sec, insertAfter.nextSibling);
-          insertAfter = sec; // advance the pointer
+          insertAfter = sec;
         } else {
           container.appendChild(sec);
           insertAfter = sec;
         }
       }
 
-      // Render items using the same 'pub' card style
       const root = sec.querySelector('.list');
       root.innerHTML = '';
       for (const p of items) {
@@ -309,13 +405,15 @@
           p.pdf ? `<a href="${p.pdf}" target="_blank" rel="noopener">PDF</a>` : '',
           p.code? `<a href="${p.code}" target="_blank" rel="noopener">Code</a>`: ''
         ].filter(Boolean).join(' · ');
-        const roleBits = [p.role, p.credit].filter(Boolean).join(' · ');
-
+        const creditInfo = [p.credit, p.role, p.note].filter(Boolean).join(' · ');
+        const venue = [p.venue, p.location].filter(Boolean).join(', ');
+        const dateParts = [p.date, p.year].filter(Boolean);
+        
         div.innerHTML = `
           <div class="pub-title">${p.title || ''}</div>
           <div class="pub-venue">
-            ${[p.authors, p.venue, p.year].filter(Boolean).join(' · ')}
-            ${roleBits ? ` · <em>${roleBits}</em>` : ''}
+            ${[p.authors, venue, dateParts.join(' · ')].filter(Boolean).join(' · ')}
+            ${creditInfo ? ` · <em>${creditInfo}</em>` : ''}
           </div>
           <div class="meta">${[links, extra].filter(Boolean).join(' · ')}</div>
         `;
@@ -324,8 +422,6 @@
     }
   }
 
-
-  // Theme handling
   function setTheme(mode){
     document.documentElement.classList.toggle('light', mode==='light');
     localStorage.setItem('theme', mode);
@@ -337,10 +433,10 @@
     setTheme(prefersLight? 'light' : 'dark');
   }
 
-  // Boot
   initTheme();
   applyConfig();
   renderRepos();
+  renderAwards();
   renderPubs();
   renderExtraSections();
   renderNews();
@@ -351,16 +447,5 @@
   $('#year').textContent = new Date().getFullYear();
   $('#editLink').href = '#config';
   </script>
-
-  <!--
-  =============================
-  DEPLOYMENT (GitHub Pages)
-  1) Create a repo named samdporter.github.io
-  2) Put this file at the repo root as index.html
-  3) (Optional) Add a blank file named .nojekyll to bypass Jekyll
-  4) In Settings → Pages, set Source to "Deploy from a branch" (main / root)
-  5) Push. Your site will be live at https://samdporter.github.io
-  =============================
-  -->
 </body>
 </html>
